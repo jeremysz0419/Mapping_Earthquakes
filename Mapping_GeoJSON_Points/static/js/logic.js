@@ -1,7 +1,7 @@
 //check if logic is accessed by chrome
 console.log("working");
-// Create the map object with center at the San Francisco airport.
-let map = L.map("mapid").setView([37.5, -122.5], 10);
+// Create the map object with center and zoom level.
+let map = L.map("mapid").setView([30, 30], 2);
 // Add GeoJSON data.
 let sanFranAirport = {
   type: "FeatureCollection",
@@ -46,6 +46,16 @@ let streets = L.tileLayer(
     accessToken: API_KEY,
   }
 );
-
 // Then we add our 'graymap' tile layer to the map.
 streets.addTo(map);
+
+// Accessing the airport GeoJSON URL
+let airportData =
+  "https://raw.githubusercontent.com/<GitHub_name>/Mapping_Earthquakes/main/majorAirports.json";
+
+// Grabbing our GeoJSON data.
+d3.json(airportData).then(function (data) {
+  console.log(data);
+  // Creating a GeoJSON layer with the retrieved data.
+  L.geoJSON(data).addTo(map);
+});
