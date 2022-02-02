@@ -20,24 +20,28 @@ let satelliteStreets = L.tileLayer(
 
 let baseMaps = {
   Streets: streets,
-  "Satellite Streets": satelliteStreets,
+  Satellite: satelliteStreets,
 };
 
 //  Add a marker to the map for Los Angeles, California.
 let map = L.map("mapid", {
-  center: [43.7, -79.3],
-  zoom: 11,
+  center: [39.5, -98.5],
+  zoom: 3,
   layers: [satelliteStreets],
 });
 
 L.control.layers(baseMaps).addTo(map);
 
-// Accessing the Toronto neighborhoods GeoJSON URL.
-let torontoHoods =
-  "https://raw.githubusercontent.com/jeremysz0419/Mapping_Earthquakes/main/torontoNeighborhoods.json";
-// Grabbing our GeoJSON data.
-d3.json(torontoData).then(function (data) {
-  console.log(data);
+// Retrieve the earthquake GeoJSON data.
+d3.json(
+  "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson"
+).then(function (data) {
   // Creating a GeoJSON layer with the retrieved data.
-  L.geoJSON(data).addTo(map);
+  L.geoJSON(data, {
+    pointToLayer: function (feature, latng) {
+      console.log(data);
+      return L.circlMarker(latlng);
+    },
+    style: styleInfo,
+  }).addTo(map);
 });
